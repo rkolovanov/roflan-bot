@@ -12,12 +12,6 @@ class Storage:
         elif path is not None:
             self.read_from_file(path)
 
-    def __setitem__(self, key: str, value):
-        self.set(key, value)
-
-    def __getitem__(self, key: str):
-        return self.get(key)
-
     def set(self, key: str, value):
         self._data[key] = value
 
@@ -52,3 +46,9 @@ class Storage:
                 json.dump(self._data, file)
         except FileNotFoundError as error:
             print("Файл не найден:", error)
+
+    def __setitem__(self, key: str, value):
+        self.set(key, value)
+
+    def __getitem__(self, key: str):
+        return self.get(key)
