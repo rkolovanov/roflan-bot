@@ -1,4 +1,6 @@
 from roflan_bot.actions.common.Action import Action
+from roflan_bot.common.InterClassStorage import InterClassStorage
+from roflan_bot.helpers import get_random_element
 from discord import Message
 
 
@@ -7,4 +9,8 @@ class WakeUpAction(Action):
         super(WakeUpAction, self).__init__(name, description, access_level)
 
     async def execute(self, message: Message):
-        pass
+        client = InterClassStorage.get("client")
+        client.conversation_settings_registry.change_settings(message.channel.id, "silent", False)
+
+        thanks_answer_phrase = get_random_element(client.phrases["okay"])
+        await message.channel.send(thanks_answer_phrase)

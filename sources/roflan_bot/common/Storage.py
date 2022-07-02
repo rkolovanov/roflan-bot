@@ -30,13 +30,18 @@ class Storage:
     def items(self):
         return self._data.items()
 
-    def read_from_file(self, path: str):
-        self._path = path
+    def read_from_file(self, path: str = None):
+        if path is None:
+            path = self._path
+        else:
+            self._path = path
         try:
             with open(path, mode="r", encoding="utf-8") as file:
                 self._data = json.load(file)
-        except FileNotFoundError as error:
-            print("Файл не найден:", error)
+        except FileNotFoundError as _:
+            self._data = {}
+            with open(path, mode="w", encoding="utf-8") as file:
+                file.write("{}")
 
     def save_to_file(self, path: str = None):
         if path is None:

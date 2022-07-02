@@ -7,4 +7,5 @@ class EnableFeatureAction(Action):
         super(EnableFeatureAction, self).__init__(name, description, access_level)
 
     async def execute(self, message: Message):
+        # TODO: Реализовать
         pass

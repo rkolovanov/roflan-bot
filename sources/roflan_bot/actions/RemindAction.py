@@ -9,4 +9,4 @@ class RemindAction(Action):
 
     async def execute(self, message: Message):
         client = InterClassStorage.get("client")
-        # ...
+        # TODO: Реализовать

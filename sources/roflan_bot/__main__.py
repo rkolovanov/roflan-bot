@@ -1,6 +1,7 @@
 import logging
 from roflan_bot import BotClient
 from roflan_bot.common import Storage, InterClassStorage
+from roflan_bot.reminder.ReminderHandler import ReminderHandler
 
 
 if __name__ == "__main__":
@@ -8,6 +9,9 @@ if __name__ == "__main__":
 
     config = Storage(path="../../data/config.json")
     InterClassStorage.set("config", config)
+
+    conversation_settings = Storage(path="../../data/conversation_settings.json")
+    InterClassStorage.set("conversation_settings", conversation_settings)
 
     action = Storage(path="../../data/actions.json")
     InterClassStorage.set("actions", action)

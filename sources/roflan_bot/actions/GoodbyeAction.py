@@ -9,6 +9,6 @@ class GoodbyeAction(Action):
         super(GoodbyeAction, self).__init__(name, description, access_level)
 
     async def execute(self, message: Message):
-        phrases = InterClassStorage.get("phrases")
-        goodbye_phrase = get_random_element(phrases["goodbye"])
+        client = InterClassStorage.get("client")
+        goodbye_phrase = get_random_element(client.phrases["goodbye"])
         await message.channel.send(goodbye_phrase)

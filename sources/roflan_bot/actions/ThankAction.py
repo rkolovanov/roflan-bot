@@ -9,6 +9,6 @@ class ThankAction(Action):
         super(ThankAction, self).__init__(name, description, access_level)
 
     async def execute(self, message: Message):
-        phrases = InterClassStorage.get("phrases")
-        thanks_answer_phrase = get_random_element(phrases["thanks_answer"])
+        client = InterClassStorage.get("client")
+        thanks_answer_phrase = get_random_element(client.phrases["thanks_answer"])
         await message.channel.send(thanks_answer_phrase)
