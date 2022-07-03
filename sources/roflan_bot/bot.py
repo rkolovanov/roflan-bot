@@ -1,8 +1,3 @@
-import discord
-import logging
-import traceback
-from discord.ext import tasks
-from roflan_bot.helpers import get_random_element
 from roflan_bot.common import InterClassStorage
 from roflan_bot.actions.common.ActionRecognizer import ActionRecognizer
 from roflan_bot.actions.common.ActionRegistry import ActionRegistry
@@ -10,6 +5,11 @@ from roflan_bot.conversations.ConversationSettingsRegistry import ConversationSe
 from roflan_bot.reminder.ReminderHandler import ReminderHandler
 from roflan_bot.text.TextAnalyzer import TextAnalyzer
 from roflan_bot.text.TextProcessor import TextProcessor
+from random import randint
+from discord.ext import tasks
+import discord
+import logging
+import traceback
 
 
 class BotClient(discord.Client):
@@ -39,7 +39,7 @@ class BotClient(discord.Client):
 
     def get_random_phrase(self, name: str):
         if name in self.phrases.keys():
-            return get_random_element(self.phrases[name])
+            return self.phrases[name][randint(0, len(self.phrases[name]) - 1)]
         return None
 
     async def on_connect(self):
@@ -76,14 +76,22 @@ class BotClient(discord.Client):
         if len(recognized_actions) == 0:
             await message.channel.send(self.get_random_phrase("unknown"))
 
+        # TODO: Учитывать уровень доступа пользователя
         for action_name in recognized_actions:
-            action = self.action_registry.get(action_name)
-            await action.execute(message)
+            if action_name not in self.config["bot"]["actions"].keys():
+                self.config["bot"]["actions"][action_name] = {"enabled": True}
+                self.config.save_to_file()
+
+            if self.config["bot"]["actions"][action_name]["enabled"]:
+                action = self.action_registry.get(action_name)
+                await action.execute(self, message)
+            else:
+                await message.channel.send(self.get_random_phrase("action_disabled"))
 
 
 @tasks.loop(seconds=1)
-async def reminder_loop(client: BotClient):
-    expired_reminders = client.reminder_handler.remove_and_get_expired_reminders()
+async def reminder_loop(bot: BotClient):
+    expired_reminders = bot.reminder_handler.remove_and_get_expired_reminders()
 
     for reminder in expired_reminders:
-        await reminder.channel.send("Напоминаю, что вам нужно {}".format(reminder.message))
+        await reminder.channel.send(f"Напоминаю, что вам нужно {reminder.message}")

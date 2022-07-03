@@ -6,7 +6,7 @@ class TextAnalyzer:
         pass
 
     @staticmethod
-    def is_appeal_to_bot(message):
+    def is_appeal_to_bot(message: str) -> bool:
         config = InterClassStorage.get("config")
         bot_names = config["bot"]["names"]
         split_message = message.split()

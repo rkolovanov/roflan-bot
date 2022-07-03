@@ -1,13 +1,14 @@
 from roflan_bot.common.Storage import Storage
+from typing import Any
 
 
 class InterClassStorage:
-    _storage = Storage()
+    _STORAGE = Storage()
 
     @staticmethod
-    def set(key: str, value):
-        InterClassStorage._storage.set(key, value)
+    def set(key: str, value: Any) -> None:
+        InterClassStorage._STORAGE.set(key, value)
 
     @staticmethod
-    def get(key: str):
-        return InterClassStorage._storage.get(key)
+    def get(key: str) -> Any:
+        return InterClassStorage._STORAGE.get(key)

@@ -7,5 +7,5 @@ class Action:
         self.description = description
         self.access_level = access_level
 
-    async def execute(self, message: Message):
+    async def execute(self, bot, message: Message):
         pass

@@ -1,11 +1,23 @@
 from roflan_bot.actions.common.Action import Action
 from discord import Message
+import re
 
 
 class WhoIsAction(Action):
     def __init__(self, name: str, description: str, access_level: int):
         super(WhoIsAction, self).__init__(name, description, access_level)
 
-    async def execute(self, message: Message):
-        # TODO: Реализовать
-        pass
+    def recognize_name(self, message: str) -> str:
+        match = re.search(r"кто такой ([A-Za-zА-Яа-я\d ]+)", message, flags=re.IGNORECASE)
+        if match is None:
+            return None
+        return match[1]
+
+    async def execute(self, bot, message: Message):
+        name = self.recognize_name(message.content)
+
+        if name is not None:
+            await message.channel.send("{} {} - {}".format(bot.get_random_phrase("think"), name,
+                                                           bot.get_random_phrase("who_is")))
+        else:
+            await message.channel.send(bot.get_random_phrase("unknown"))

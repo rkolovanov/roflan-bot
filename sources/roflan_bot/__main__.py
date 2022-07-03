@@ -1,11 +1,14 @@
-import logging
-from roflan_bot import BotClient
+from roflan_bot.bot import BotClient
 from roflan_bot.common import Storage, InterClassStorage
-from roflan_bot.reminder.ReminderHandler import ReminderHandler
+import logging
+import sys
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+    logging.basicConfig(stream=sys.stdout,
+                        level=logging.INFO,
+                        format="%(asctime)s %(name)s [%(levelname)s]: %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S")
 
     config = Storage(path="../../data/config.json")
     InterClassStorage.set("config", config)
@@ -20,6 +23,4 @@ if __name__ == "__main__":
     InterClassStorage.set("phrases", phrases)
 
     client = BotClient()
-    InterClassStorage.set("client", client)
-
     client.run(config["credentials"]["token"])

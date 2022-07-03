@@ -1,5 +1,6 @@
-import copy
 import json
+from copy import deepcopy
+from typing import Any
 
 
 class Storage:
@@ -8,14 +9,14 @@ class Storage:
         self._data = {}
 
         if data is not None:
-            self._data = copy.deepcopy(data)
+            self._data = deepcopy(data)
         elif path is not None:
             self.read_from_file(path)
 
-    def set(self, key: str, value):
+    def set(self, key: str, value: Any) -> None:
         self._data[key] = value
 
-    def get(self, key: str):
+    def get(self, key: str) -> Any:
         if key in self._data.keys():
             return self._data[key]
         else:
@@ -30,7 +31,7 @@ class Storage:
     def items(self):
         return self._data.items()
 
-    def read_from_file(self, path: str = None):
+    def read_from_file(self, path: str = None) -> None:
         if path is None:
             path = self._path
         else:
@@ -43,7 +44,7 @@ class Storage:
             with open(path, mode="w", encoding="utf-8") as file:
                 file.write("{}")
 
-    def save_to_file(self, path: str = None):
+    def save_to_file(self, path: str = None) -> None:
         if path is None:
             path = self._path
         try:
@@ -52,8 +53,8 @@ class Storage:
         except FileNotFoundError as error:
             print("Файл не найден:", error)
 
-    def __setitem__(self, key: str, value):
+    def __setitem__(self, key: str, value: Any) -> None:
         self.set(key, value)
 
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> Any:
         return self.get(key)

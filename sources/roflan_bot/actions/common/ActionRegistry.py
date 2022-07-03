@@ -45,12 +45,12 @@ class ActionRegistry:
             else:
                 self._logger.warning(f"Неизвестное действие: '{action_name}'")
 
-    def get(self, action_name: str):
+    def get(self, action_name: str) -> typing.Any:
         if action_name in self._actions.keys():
             return self._actions[action_name]
 
         self._logger.error(f"Неизвестное действие: '{action_name}'")
         return Action()
 
-    def __getitem__(self, action_name: str):
+    def __getitem__(self, action_name: str) -> typing.Any:
         return self.get(action_name)

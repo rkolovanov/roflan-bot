@@ -1,4 +1,3 @@
-from roflan_bot.common.InterClassStorage import InterClassStorage
 import re
 
 
@@ -7,7 +6,7 @@ class TextProcessor:
         pass
 
     @staticmethod
-    def replace_characters(text: str, pattern: str, replacement="") -> str:
+    def replace_characters(text: str, pattern: str, replacement: str = "") -> str:
         text = re.sub(pattern, replacement, text)
         return re.sub(r" +", " ", text).strip(" ")
 
