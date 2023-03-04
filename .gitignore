@@ -1,2 +1,4 @@
-data/config.json
-.idea
+/.idea
+/venv
+
+/data/config.json
