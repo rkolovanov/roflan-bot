@@ -1,5 +1,4 @@
 from discord.abc import Messageable
-from datetime import datetime
 
 
 class Reminder:

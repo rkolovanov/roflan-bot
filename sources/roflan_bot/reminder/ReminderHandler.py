@@ -1,5 +1,5 @@
 from datetime import datetime
-from roflan_bot.reminder.Reminder import Reminder
+from roflan_bot.reminder import Reminder
 
 
 class ReminderHandler:

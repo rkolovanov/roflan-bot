@@ -1,17 +1,20 @@
 import json
 from copy import deepcopy
-from typing import Any
+from typing import Any, Union
 
 
 class Storage:
-    def __init__(self, data: dict = None, path: str = None):
+    EMPTY_JSON = "{}"
+
+    def __init__(self, data: dict = None, path: str = None, encoding="utf-8", create=True):
         self._path = path
         self._data = {}
+        self._encoding = encoding
 
         if data is not None:
             self._data = deepcopy(data)
         elif path is not None:
-            self.read_from_file(path)
+            self.read_from_file(path, create=create)
 
     def set(self, key: str, value: Any) -> None:
         self._data[key] = value
@@ -31,27 +34,28 @@ class Storage:
     def items(self):
         return self._data.items()
 
-    def read_from_file(self, path: str = None) -> None:
+    def read_from_file(self, path: Union[str, None] = None, create: bool = True) -> None:
         if path is None:
             path = self._path
         else:
             self._path = path
-        try:
-            with open(path, mode="r", encoding="utf-8") as file:
-                self._data = json.load(file)
-        except FileNotFoundError as _:
-            self._data = {}
-            with open(path, mode="w", encoding="utf-8") as file:
-                file.write("{}")
 
-    def save_to_file(self, path: str = None) -> None:
+        try:
+            with open(path, mode="r", encoding=self._encoding) as file:
+                self._data = json.load(file)
+        except FileNotFoundError as error:
+            if create:
+                with open(path, mode="w", encoding=self._encoding) as file:
+                    file.write(Storage.EMPTY_JSON)
+            else:
+                raise error
+
+    def save_to_file(self, path: Union[str, None] = None) -> None:
         if path is None:
             path = self._path
-        try:
-            with open(path, mode="w", encoding="utf-8") as file:
-                json.dump(self._data, file)
-        except FileNotFoundError as error:
-            print("Файл не найден:", error)
+
+        with open(path, mode="w", encoding=self._encoding) as file:
+            json.dump(self._data, file, indent=2)
 
     def __setitem__(self, key: str, value: Any) -> None:
         self.set(key, value)

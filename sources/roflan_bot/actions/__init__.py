@@ -1,4 +1,4 @@
-from .common import *
+from .common import Action, ActionRecognizer, ActionRegistry
 from .DisableFeatureAction import DisableFeatureAction
 from .EnableFeatureAction import EnableFeatureAction
 from .FeatureListAction import FeatureListAction

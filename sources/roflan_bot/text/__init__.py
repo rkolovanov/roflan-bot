@@ -1,2 +1,2 @@
-from .TextAnalyzer import TextAnalyzer
-from .TextProcessor import TextProcessor
+from .TextAnalyzing import TextAnalyzing
+from .TextProcessing import TextProcessing

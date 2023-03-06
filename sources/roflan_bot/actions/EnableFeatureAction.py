@@ -1,13 +1,15 @@
-from roflan_bot.actions.common.Action import Action
-from discord import Message
 import re
+from typing import Union
+from discord import Message
+from roflan_bot.actions.common import Action
 
 
 class EnableFeatureAction(Action):
     def __init__(self, name: str, description: str, access_level: int):
-        super(EnableFeatureAction, self).__init__(name, description, access_level)
+        super().__init__(name, description, access_level)
 
-    def recognize_action_name(self, message: str) -> str or None:
+    @staticmethod
+    def recognize_action_name(message: str) -> Union[str, None]:
         match = re.search(r"команд[уе] ([A-Za-z_]+)", message, flags=re.IGNORECASE)
         if match is not None:
             return match[1]

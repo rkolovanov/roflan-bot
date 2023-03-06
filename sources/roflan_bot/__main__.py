@@ -1,26 +1,19 @@
-from roflan_bot.bot import BotClient
-from roflan_bot.common import Storage, InterClassStorage
 import logging
 import sys
+from roflan_bot.common import DataStorage
+from roflan_bot.bot import BotClient
 
 
 if __name__ == "__main__":
-    logging.basicConfig(stream=sys.stdout,
-                        level=logging.INFO,
-                        format="%(asctime)s %(name)s [%(levelname)s]: %(message)s",
-                        datefmt="%Y-%m-%d %H:%M:%S")
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S",
+                        format="%(asctime)s %(name)s [%(levelname)s]: %(message)s")
 
-    config = Storage(path="../../data/config.json")
-    InterClassStorage.set("config", config)
+    success = True
+    success &= DataStorage.set_actions_data(path="../../data/actions.json")
+    success &= DataStorage.set_configuration_data(path="../../data/config.json")
+    success &= DataStorage.set_phrases_data(path="../../data/phrases.json")
+    success &= DataStorage.set_conversation_settings_data(path="../../data/conversation_settings.json")
 
-    conversation_settings = Storage(path="../../data/conversation_settings.json")
-    InterClassStorage.set("conversation_settings", conversation_settings)
-
-    action = Storage(path="../../data/actions.json")
-    InterClassStorage.set("actions", action)
-
-    phrases = Storage(path="../../data/phrases.json")
-    InterClassStorage.set("phrases", phrases)
-
-    client = BotClient()
-    client.run(config["credentials"]["token"])
+    if success:
+        client = BotClient()
+        client.run(DataStorage.get("config")["credentials"]["token"], log_handler=None)

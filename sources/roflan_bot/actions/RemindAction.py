@@ -1,15 +1,17 @@
-from roflan_bot.actions.common.Action import Action
-from roflan_bot.reminder.Reminder import Reminder
-from datetime import datetime
-from discord import Message
 import re
+from datetime import datetime
+from typing import Union
+from discord import Message
+from roflan_bot.actions.common import Action
+from roflan_bot.reminder import Reminder
 
 
 class RemindAction(Action):
     def __init__(self, name: str, description: str, access_level: int):
-        super(RemindAction, self).__init__(name, description, access_level)
+        super().__init__(name, description, access_level)
 
-    def recognize_reminder(self, message: Message) -> Reminder or None:
+    @staticmethod
+    def recognize_reminder(message: Message) -> Union[Reminder, None]:
         match = re.search(r"через (.+)", message.content, flags=re.IGNORECASE)
         if match is None:
             return None
